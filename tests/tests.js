@@ -1,19 +1,29 @@
+QUnit.start(function()
+{
+	
+});
+
 QUnit.test( "1,00", function( assert )
 {
 	assert.ok( _format(1) == "1,00", "Passed!" );
 });
 
-QUnit.test( "1,00", function( assert )
+QUnit.test( "2,234", function( assert )
 {
-	assert.ok( _format(1.1) == "1,10", "Passed!" );
+	assert.ok( _format(2.234) == "2,23", "Passed!" );
 });
 
-QUnit.test( "Empty string?", function( assert )
+QUnit.test( "3,339", function( assert )
 {
-	assert.ok( _format("") == "", "Passed!" );
+	assert.ok( _format(3.34) == "3,34", "Passed!" );
 });
 
-QUnit.test( "678.361,37", function( assert )
+QUnit.test( "Not typeof number?", function( assert )
 {
-	assert.ok( _format(678361.37) == "678.361,37", "Passed!" );
+	assert.throws( _format(""), "Passed!" );
+});
+
+QUnit.test( "undefined", function( assert )
+{
+	assert.throws( _format(), "Passed!" );
 });
