@@ -1,0 +1,27 @@
+{
+  "name": "kafe.real",
+  "main": "kafe.real.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/kafeltz/kafe.real",
+  "authors": [
+    "ismael <shalanga@gmail.com>"
+  ],
+  "keywords": [
+    "javascript",
+    "format",
+    "brl",
+    "brazil",
+    "real"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "qunit": ">=0"
+  }
+}
