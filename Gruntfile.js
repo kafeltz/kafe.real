@@ -11,7 +11,7 @@ module.exports = function(grunt)
 				export: ["min", "gzip"],
 				screwIE8: true,
 				banner: "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - " +
-					"<%= grunt.template.today('m/d/yyyy') %>\n" +
+					"<%= grunt.template.today('dd/mm/yyyy') %>\n" +
 					" * <%= pkg.homepage %>\n" +
 					" * Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 					" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n"
@@ -24,13 +24,16 @@ module.exports = function(grunt)
 		},
 
 		qunit: {
-			files: "tests/index.html"
+			options: {
+				'phantomPath': '/usr/local/bin/phantomjs'
+			},
+			all: ['tests/**/*.html']
 		},
 
 		connect: {
 			server: {
 			  options: {
-			    port: 8000,
+			    port: 7777,
 			    base: '.'
 			  }
 			}
@@ -52,20 +55,18 @@ module.exports = function(grunt)
 		},
 
 		jscs: {
+			options: {
+				 verbose: true
+				},
 			all: [ "<%= jshint.core.src %>", "<%= jshint.test.src %>", "<%= jshint.grunt.src %>" ]
 		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-compress");
-	grunt.loadNpmTasks("grunt-contrib-concat");
-	grunt.loadNpmTasks("grunt-contrib-copy");
-	grunt.loadNpmTasks("grunt-contrib-jshint");
-	grunt.loadNpmTasks("grunt-contrib-qunit");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
-	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-jscs");
-	grunt.loadNpmTasks("grunt-text-replace");
 	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-croc-qunit');
 
 	grunt.registerTask("ugly", [ "uglify" ]);
 	grunt.registerTask("lint", [ "jscs" ]);
@@ -76,6 +77,10 @@ module.exports = function(grunt)
 	    grunt.warn('you need to provide a name.');
 
 	  console.log('hello ' + name);
+	});
+
+	grunt.event.on('qunit.spawn', function (url) {
+		grunt.log.ok("Running test: " + url);
 	});
 
 };
