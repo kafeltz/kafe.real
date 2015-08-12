@@ -1,8 +1,6 @@
 /*jshint -W089 */
 (function($)
 {
-	'use strict';
-
 	var pluginName = 'moneyBehavior',
 		defaults = {
 			debug: false,
@@ -56,7 +54,7 @@
 				render.call(self);
 			}
 
-			if (DEBUG) {
+			if (this.options.debug) {
 				console.log( event.which );
 			}
 
