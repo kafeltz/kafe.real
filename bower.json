@@ -1,18 +1,11 @@
 {
-  "name": "kafe.real",
-  "main": "kafe.real.js",
-  "version": "1.0.0",
-  "homepage": "https://github.com/kafeltz/kafe.real",
+  "name": "kafe.lab",
+  "version": "0.0.0",
+  "homepage": "https://github.com/kafeltz/kafe.lab",
   "authors": [
     "ismael <shalanga@gmail.com>"
   ],
-  "keywords": [
-    "javascript",
-    "format",
-    "brl",
-    "brazil",
-    "real"
-  ],
+  "main": "index.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -22,6 +15,6 @@
     "tests"
   ],
   "devDependencies": {
-    "qunit": ">=0"
+    "jquery": "~2.1.4"
   }
 }
