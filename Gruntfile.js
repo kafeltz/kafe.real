@@ -5,7 +5,18 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		uglify: {
 			options: {
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd/mm/yyyy") %> */\n'
+				banner: '/*! <%= pkg.name %>.js <%= grunt.template.today("dd/mm/yyyy") %> */\n',
+				preserveComments: false,
+				screwIE8: true,
+				sourceMap: true,
+				sourceMapName: 'dist/<%= pkg.name %>.map',
+				report: "gzip",
+				compress: {
+					drop_console: true,
+					global_defs: {
+						DEBUG: false
+					}
+				}
 			},
 			dist: {
 				src: 'kafe.real.js',
@@ -14,8 +25,13 @@ module.exports = function(grunt) {
 		},
 
 		jshint: {
-			files: ['Gruntfile.js', 'money.js'],
+			files: ['Gruntfile.js', 'kafe.real.js', "package.json"],
 			options: {
+				eqeqeq: true,
+				nonbsp: true,
+				notypeof: true,
+				shadow: true,
+				maxdepth: 1,
 				globals: {
 					jQuery: true
 				},

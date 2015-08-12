@@ -1,5 +1,5 @@
 /*jshint -W089 */
-;(function ( $, window, document )
+(function($)
 {
 	'use strict';
 
@@ -52,9 +52,12 @@
 				self.value = [];
 			}
 
-				console.log( event.which );
 			if (checkValidKeys.call(self, event)) {
 				render.call(self);
+			}
+
+			if (DEBUG) {
+				console.log( event.which );
 			}
 
 			// prevent rendering...
@@ -106,4 +109,4 @@
 		});
 	};
 
-})( jQuery, window, document );
+})(jQuery);
