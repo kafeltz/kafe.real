@@ -4,7 +4,7 @@ Simple solution, simple code, simple goal.
 You may want to tweak as your need fits better. Better than a complex plugin unreadable.
 
 
-# Tests
+## Tests
     0.1     0,10
     0.11    0,11
     0.111   0,11
@@ -22,4 +22,5 @@ You may want to tweak as your need fits better. Better than a complex plugin unr
     99.09   99,09
     99.199  99,20
 
+## demo
 http://jsfiddle.net/shalanga/pwfuy927/
