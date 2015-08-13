@@ -23,5 +23,8 @@ Be able to:
 - reset or clear the entire text by selecting and pressing backspace
 - reset or clear the entire text and then type a number
 
+Ignored behavior:
+ - delete char with delete-key erasing the tail causing for example 123,46 -> 13, (on blur it will be reformatted)
+
 Extra info:
- - cut, copy and paste by mouse works nativelyf
+ - cut, copy and paste by mouse works natively

@@ -4,7 +4,7 @@
 	var pluginName = 'moneyBehavior',
 		defaults = {
 			debug: false,
-			selectOnFocus: false
+			selectOnFocus: true
 		};
 
 	var KEY_0 = 48;
@@ -43,6 +43,7 @@
 	var KEY_ALT       = 18;
 	var KEY_BACKSPACE = 8;
 	var KEY_DELETE    = 46;
+	var KEY_TAB       = 9;
 
 	var KEY_ALPHA_NUMERIC_A = 65;
 	var KEY_ALPHA_NUMERIC_C = 67;
@@ -51,7 +52,7 @@
 
 	var numberKeys           = [KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9];
 	var numericPadKeys       = [KEY_NUMPAD_0 , KEY_NUMPAD_1, KEY_NUMPAD_2, KEY_NUMPAD_3, KEY_NUMPAD_4, KEY_NUMPAD_5, KEY_NUMPAD_6, KEY_NUMPAD_7, KEY_NUMPAD_8, KEY_NUMPAD_9];
-	var non_digit_valid_keys = [ KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_END, KEY_HOME, KEY_ENTER, KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_DELETE ];
+	var non_digit_valid_keys = [KEY_TAB, KEY_ENTER, KEY_SHIFT, KEY_CTRL, KEY_ALT];
 
 	var numbers = numberKeys.concat(numericPadKeys);
 
@@ -80,6 +81,16 @@
 	function init()
 	{
 		var self = this;
+
+		_translate_data_attr.call(this);
+
+		if (this.options.selectOnFocus)
+		{
+			this.$element.on("click", function()
+			{
+				self.$element.select();
+			});
+		}
 
 		this.$element.on("paste", function(event)
 		{
@@ -134,6 +145,12 @@
 				event.preventDefault();
 				return false;
 			}
+		});
+
+		this.$element.on("blur", function()
+		{
+			self.can_render = true;
+			render.call(self);
 		});
 	}
 
@@ -190,6 +207,17 @@
 
 		// after render, reset.
 		this.can_render = false;
+	}
+
+	function _translate_data_attr()
+	{
+		var self = this;
+		var data = this.$element.data();
+
+		$.each(data, function(attr, value)
+		{
+			self.options[ attr ] = value;
+		});
 	}
 
 	// http://blog.tompawlak.org/number-currency-formatting-javascript
