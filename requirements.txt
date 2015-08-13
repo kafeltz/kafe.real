@@ -1,0 +1,27 @@
+Be able to:
+
+- control + c
+- control + v
+- control + x
+
+- shift   + insert
+- control + insert
+
+- move carret around
+  - one step left
+  - one step right
+  - go first position
+  - go last position
+
+- select text
+  - by mouse
+  - by keyboard
+    - one by one
+    - select all
+
+- paste from clipboard
+- reset or clear the entire text by selecting and pressing backspace
+- reset or clear the entire text and then type a number
+
+Extra info:
+ - cut, copy and paste by mouse works nativelyf

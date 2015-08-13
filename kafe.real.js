@@ -1,28 +1,77 @@
 /*jshint -W089 */
-(function($, window)
+(function($)
 {
 	var pluginName = 'moneyBehavior',
 		defaults = {
 			debug: false,
 			selectOnFocus: false
 		};
-	var numberKeys     = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
-	var numericPadKeys = [96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-	var carretKeys     = [33, 34, 35, 36, 37, 39];
-	var validKeys      = [8, 9, 16, 17, 18, 91 ].concat(numberKeys).concat(numericPadKeys);
+
+	var KEY_0 = 48;
+	var KEY_1 = 49;
+	var KEY_2 = 50;
+	var KEY_3 = 51;
+	var KEY_4 = 52;
+	var KEY_5 = 53;
+	var KEY_6 = 54;
+	var KEY_7 = 55;
+	var KEY_8 = 56;
+	var KEY_9 = 57;
+
+	var KEY_NUMPAD_0 = 96;
+	var KEY_NUMPAD_1 = 97;
+	var KEY_NUMPAD_2 = 98;
+	var KEY_NUMPAD_3 = 99;
+	var KEY_NUMPAD_4 = 100;
+	var KEY_NUMPAD_5 = 101;
+	var KEY_NUMPAD_6 = 102;
+	var KEY_NUMPAD_7 = 103;
+	var KEY_NUMPAD_8 = 104;
+	var KEY_NUMPAD_9 = 105;
+
+	var KEY_LEFT  = 37;
+	var KEY_UP    = 38;
+	var KEY_RIGHT = 39;
+	var KEY_DOWN  = 40;
+
+	var KEY_END  = 35;
+	var KEY_HOME = 36;
+
+	var KEY_ENTER     = 13;
+	var KEY_SHIFT     = 16;
+	var KEY_CTRL      = 17;
+	var KEY_ALT       = 18;
+	var KEY_BACKSPACE = 8;
+	var KEY_DELETE    = 46;
+
+	var KEY_ALPHA_NUMERIC_A = 65;
+	var KEY_ALPHA_NUMERIC_C = 67;
+	var KEY_ALPHA_NUMERIC_V = 86;
+	var KEY_ALPHA_NUMERIC_X = 88;
+
+	var numberKeys           = [KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9];
+	var numericPadKeys       = [KEY_NUMPAD_0 , KEY_NUMPAD_1, KEY_NUMPAD_2, KEY_NUMPAD_3, KEY_NUMPAD_4, KEY_NUMPAD_5, KEY_NUMPAD_6, KEY_NUMPAD_7, KEY_NUMPAD_8, KEY_NUMPAD_9];
+	var non_digit_valid_keys = [ KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_END, KEY_HOME, KEY_ENTER, KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_DELETE ];
+
+	var numbers = numberKeys.concat(numericPadKeys);
+
+	var control_keys = [KEY_ALPHA_NUMERIC_A, KEY_ALPHA_NUMERIC_C, KEY_ALPHA_NUMERIC_V, KEY_ALPHA_NUMERIC_X];
 
 	function Plugin( element, options )
 	{
-		this.$element  = $(element);
-		this.element   = element;
-		this.options   = $.extend({}, defaults, options) ;
-		this._defaults = defaults;
-		this._name     = pluginName;
+		this.$element   = $(element);
+		this.element    = element;
+		this.options    = $.extend({}, defaults, options) ;
+		this._defaults  = defaults;
+		this._name      = pluginName;
+		this.can_render = false;
 
 		this.value = [];
 
-		if (this.$element.attr("value") && this.$element.attr("value").length !== 0) {
+		if (this.$element.attr("value") && this.$element.attr("value").length > 0) {
 			this.value = this.$element.val().replace(/[^0-9]/g, "").split("");
+		} else {
+			this.$element.val("0,00");
 		}
 
 		init.call(this);
@@ -37,9 +86,10 @@
 			var pastedData = event.originalEvent.clipboardData.getData('text');
 			var cleaned = pastedData.replace(/[^0-9]/g, "");
 
-			if (cleaned.length)
+			if (cleaned.length > 0)
 			{
 				self.value = cleaned.split("");
+				self.can_render = true;
 				render.call(self);
 			}
 
@@ -50,51 +100,33 @@
 		this.$element.on("keydown", function(event)
 		{
 			var value = event.which;
-
-			// carret at the end of the string, appends the chars, otherwise, it insert at carret position
-			var append = true;
-
-			console.info( getPos(self.$element), self.$element.val().length );
-
-			append = getPos(self.$element) === self.$element.val().length;
+			var meta = event.metaKey || event.ctrlKey;
 
 			if (window.getSelection().toString() === self.$element.val()) {
 				self.value = [];
 			}
 
-			if (numberKeys.indexOf(value) !== -1) {
-				if (append) {
-					self.value.push( value - 48 );
-				} else {
-					self.value.splice(getPos(self.$element) - 1, 0, value - 48 );
-				}
+			if (is_digit(value))
+			{
+				_push.call(self, value);
 			}
-			else if (numericPadKeys.indexOf(value) !== -1) {
-				if (append) {
-					self.value.push( value - 96 );
-				} else {
-					self.value.splice(getPos(self.$element), 0, value - 96 );
-				}
-			}
-			else if (value === 8) {
-				self.value.pop();
+			else if (value === KEY_BACKSPACE)
+			{
+				_pop.call(self);
 			}
 
-
-			if (self.value === undefined) {
+			if (self.value === undefined)
+			{
 				self.value = [];
 			}
 
+			render.call(self);
 
-			if (checkValidKeys.call(self, event)) {
-				render.call(self);
+			// prevent default action... but allow paste
+			if(meta && control_keys.indexOf(value) !== -1) {
+				return true;
 			}
-
-
-			// prevent rendering...
-			// allow paste
-			if(event.metaKey&& value == 86 || carretKeys.indexOf( value ) !== -1)
-			{
+			else if (non_digit_valid_keys.indexOf( value ) !== -1) {
 				return true;
 			}
 			else
@@ -105,13 +137,40 @@
 		});
 	}
 
-	function checkValidKeys( event )
+	function is_digit( value )
 	{
-	   return validKeys.indexOf( event.which ) !== -1;
+		return numbers.indexOf( value ) !== -1;
+	}
+
+	function _pop()
+	{
+		this.can_render = true;
+
+		return this.value.pop();
+	}
+
+	function _push( digit )
+	{
+		this.can_render = true;
+
+		var ascii_math = 0;
+
+		if (numberKeys.indexOf(digit) !== -1) {
+			ascii_math = 48;
+		}
+		else if (numericPadKeys.indexOf(digit) !== -1) {
+			ascii_math = 96;
+		}
+
+		this.value.push( digit - ascii_math );
 	}
 
 	function render()
 	{
+		if (!this.can_render) {
+			return;
+		}
+
 		var v = 0.0;
 
 		if (this.value.length > 0)
@@ -128,6 +187,9 @@
 		{
 			this.$element.val( "0,00" );
 		}
+
+		// after render, reset.
+		this.can_render = false;
 	}
 
 	// http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -137,31 +199,6 @@
 		   .toFixed(2)
 		   .replace(".", ",")
 		   .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-	}
-
-	// copied and changed from jquery.mask.js source
-	function getPos($element)
-	{
-		var sel;
-		var	pos = 0;
-		var	ctrl = $element.get(0);
-		var	dSel = document.selection;
-		var	cSelStart = ctrl.selectionStart;
-
-		// IE Support
-		if (dSel && navigator.appVersion.indexOf('MSIE 10') === -1)
-		{
-			sel = dSel.createRange();
-			sel.moveStart('character', el.is('input') ? -el.val().length : -el.text().length);
-			pos = sel.text.length;
-		}
-		// Firefox support
-		else if (cSelStart || cSelStart === '0')
-		{
-			pos = cSelStart;
-		}
-
-		return pos;
 	}
 
 	$.fn[pluginName] = function( options )
@@ -174,4 +211,4 @@
 		});
 	};
 
-})(jQuery, window);
+})(jQuery);

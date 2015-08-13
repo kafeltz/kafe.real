@@ -20,7 +20,7 @@
 <body>
 
 <h2>Money</h2>
-<input type="text" value="8,99" placeholder="0,00" data-money-behavior>
+<input type="text" value="" placeholder="0,00" autocomplete="off" data-money-behavior>
 
 <p>&nbsp;</p>
 
