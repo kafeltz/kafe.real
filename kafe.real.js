@@ -29,11 +29,20 @@
 	var KEY_NUMPAD_8 = 104;
 	var KEY_NUMPAD_9 = 105;
 
+	var KEY_LEFT  = 37;
+	var KEY_UP    = 38;
+	var KEY_RIGHT = 39;
+	var KEY_DOWN  = 40;
+
+	var KEY_END  = 35;
+	var KEY_HOME = 36;
+
 	var KEY_ENTER     = 13;
 	var KEY_SHIFT     = 16;
 	var KEY_CTRL      = 17;
 	var KEY_ALT       = 18;
 	var KEY_BACKSPACE = 8;
+	var KEY_DELETE    = 46;
 	var KEY_TAB       = 9;
 
 	var KEY_ALPHA_NUMERIC_A = 65;
@@ -53,7 +62,7 @@
 	{
 		this.$element   = $(element);
 		this.element    = element;
-		this.options    = $.extend({}, defaults, options) ;
+		this.options    = $.extend({}, defaults, options, this.$element.data()) ;
 		this._defaults  = defaults;
 		this._name      = pluginName;
 		this.can_render = false;
@@ -72,8 +81,6 @@
 	function init()
 	{
 		var self = this;
-
-		_translate_data_attr.call(this);
 
 		if (this.options.selectOnFocus)
 		{
@@ -198,17 +205,6 @@
 
 		// after render, reset.
 		this.can_render = false;
-	}
-
-	function _translate_data_attr()
-	{
-		var self = this;
-		var data = this.$element.data();
-
-		$.each(data, function(attr, value)
-		{
-			self.options[ attr ] = value;
-		});
 	}
 
 	// http://blog.tompawlak.org/number-currency-formatting-javascript
