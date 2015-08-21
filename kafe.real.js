@@ -1,8 +1,8 @@
 /*jshint -W089 */
 (function($)
 {
-	var pluginName = 'moneyBehavior',
-		defaults = {
+	var pluginName = 'moneyBehavior';
+	var defaults = {
 			debug: false,
 			selectOnFocus: true
 		};
@@ -60,10 +60,10 @@
 
 		this.value = [];
 
-		if (this.$element.attr("value") && this.$element.attr("value").length > 0) {
-			this.value = this.$element.val().replace(/[^0-9]/g, "").split("");
+		if (this.$element.attr('value') && this.$element.attr('value').length > 0) {
+			this.value = this.$element.val().replace(/[^0-9]/g, '').split('');
 		} else {
-			this.$element.val("0,00");
+			this.$element.val('0,00');
 		}
 
 		init.call(this);
@@ -75,20 +75,20 @@
 
 		if (this.options.selectOnFocus)
 		{
-			this.$element.on("click", function()
+			this.$element.on('click', function()
 			{
 				self.$element.select();
 			});
 		}
 
-		this.$element.on("paste", function(event)
+		this.$element.on('paste', function(event)
 		{
 			var pastedData = event.originalEvent.clipboardData.getData('text');
-			var cleaned = pastedData.replace(/[^0-9]/g, "");
+			var cleaned = pastedData.replace(/[^0-9]/g, '');
 
 			if (cleaned.length > 0)
 			{
-				self.value = cleaned.split("");
+				self.value = cleaned.split('');
 				self.can_render = true;
 				render.call(self);
 			}
@@ -97,7 +97,7 @@
 			return true;
 		});
 
-		this.$element.on("keydown", function(event)
+		this.$element.on('keydown', function(event)
 		{
 			var value = event.which;
 			var meta = event.metaKey || event.ctrlKey;
@@ -136,7 +136,7 @@
 			}
 		});
 
-		this.$element.on("blur", function()
+		this.$element.on('blur', function()
 		{
 			self.can_render = true;
 			render.call(self);
@@ -181,7 +181,7 @@
 
 		if (this.value.length > 0)
 		{
-			v = parseFloat(this.value.join(""));
+			v = parseFloat(this.value.join(''));
 
 			v = v / 100;
 
@@ -191,7 +191,7 @@
 		}
 		else
 		{
-			this.$element.val( "0,00" );
+			this.$element.val( '0,00' );
 		}
 
 		// after render, reset.
@@ -202,9 +202,9 @@
 	function _format(num)
 	{
 		return num
-		   .toFixed(2)
-		   .replace(".", ",")
-		   .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+			.toFixed(2)
+			.replace('.', ',')
+			.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
 	}
 
 	$.fn[pluginName] = function( options )

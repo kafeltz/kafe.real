@@ -1,0 +1,18 @@
+/* http://jscs.info/rules.html */
+{
+	"validateParameterSeparator": ", ",
+	"disallowImplicitTypeConversion": ["numeric", "boolean", "binary", "string"],
+	"disallowMixedSpacesAndTabs": true,
+	"disallowMultipleLineBreaks": true,
+	"disallowMultipleLineStrings": true,
+	// "disallowMultipleSpaces": true,
+	"disallowNamedUnassignedFunctions": true,
+	"disallowTrailingComma": true,
+	"disallowTrailingWhitespace": true,
+	"disallowYodaConditions": true,
+	"maximumLineLength": 200,
+	"requireLineFeedAtFileEnd": true,
+	"requireSemicolons": true,
+	"safeContextKeyword": ["self"],
+	"validateQuoteMarks": true
+}
